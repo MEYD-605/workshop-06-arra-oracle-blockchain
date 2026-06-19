@@ -23,10 +23,15 @@ fi
 
 # Replace the hostname/IP in enode with the server's public IP
 ENODE=$(echo "$RAW_ENODE" | sed -E "s/@[^:]+:/@$SERVER_IP:/")
-echo "Server Bootnode: $ENODE"
+echo "Server Node enode: $ENODE"
+
+# Write static-nodes.json
+mkdir -p "$DATADIR/geth"
+echo "[\"$ENODE\"]" > "$DATADIR/geth/static-nodes.json"
+echo "static-nodes.json configured."
 
 echo "Starting local Geth node and syncing from server..."
-# Run local geth, connecting to the server node as bootnode
+# Run local geth with nodiscover but static peer connection
 exec geth \
   --datadir "$DATADIR" \
   --networkid $NETWORK_ID \
@@ -35,6 +40,5 @@ exec geth \
   --http.addr "127.0.0.1" \
   --http.port 8545 \
   --http.api "eth,net,web3,personal,admin" \
-  --bootnodes "$ENODE" \
   --nodiscover \
   --maxpeers 10
