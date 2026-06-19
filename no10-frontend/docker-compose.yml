@@ -1,0 +1,9 @@
+version: '3.8'
+
+services:
+  no10-frontend:
+    build: .
+    container_name: no10-paymaster-frontend
+    ports:
+      - "8085:80"
+    restart: unless-stopped

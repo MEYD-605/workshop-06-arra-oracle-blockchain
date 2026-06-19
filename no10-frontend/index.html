@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>No.10 X Paymaster Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0b0b0e;
+      --card-bg: rgba(20, 20, 25, 0.6);
+      --border: rgba(255, 255, 255, 0.08);
+      --text: #f0f0f5;
+      --text-dim: #9090a0;
+      --cyan: #00f0ff;
+      --green: #00ff66;
+      --purple: #bf5af2;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem;
+      overflow-x: hidden;
+      background-image: radial-gradient(circle at 10% 20%, rgba(0, 240, 255, 0.05) 0%, transparent 40%),
+                        radial-gradient(circle at 90% 80%, rgba(191, 90, 242, 0.05) 0%, transparent 40%);
+    }
+    header {
+      margin-bottom: 3rem;
+      text-align: center;
+      position: relative;
+    }
+    header h1 {
+      font-size: 2.8rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--cyan) 0%, var(--purple) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.03em;
+    }
+    header p {
+      color: var(--text-dim);
+      font-size: 1.1rem;
+      font-weight: 300;
+    }
+    .badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      background: rgba(0, 240, 255, 0.1);
+      border: 1px solid rgba(0, 240, 255, 0.3);
+      color: var(--cyan);
+      border-radius: 100px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      margin-top: 1rem;
+      letter-spacing: 0.05em;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      width: 100%;
+      max-width: 1000px;
+      margin-bottom: 3rem;
+    }
+    .card {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: var(--cyan);
+      opacity: 0.7;
+    }
+    .card.purple::before {
+      background: var(--purple);
+    }
+    .card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(255, 255, 255, 0.15);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+    .card h2 {
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .card h2 .status {
+      font-size: 0.8rem;
+      font-weight: 400;
+      color: var(--green);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .card h2 .status::before {
+      content: '';
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      background: var(--green);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--green);
+      animation: pulse 1.5s infinite;
+    }
+    .metric {
+      margin-bottom: 1.5rem;
+    }
+    .metric-label {
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.3rem;
+    }
+    .metric-value {
+      font-size: 1.8rem;
+      font-weight: 700;
+      font-family: 'JetBrains Mono', monospace;
+      color: #fff;
+    }
+    .address-box {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.75rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 1rem;
+      cursor: pointer;
+    }
+    .address-box:hover {
+      background: rgba(255, 255, 255, 0.06);
+    }
+    .address-text {
+      color: var(--cyan);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .copy-btn {
+      color: var(--text-dim);
+      font-size: 0.8rem;
+    }
+    .btn {
+      background: linear-gradient(135deg, var(--cyan) 0%, var(--purple) 100%);
+      border: none;
+      color: #fff;
+      padding: 0.8rem 1.5rem;
+      border-radius: 8px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+      transition: opacity 0.2s ease;
+      margin-top: 1rem;
+    }
+    .btn:hover {
+      opacity: 0.9;
+    }
+    input {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.8rem;
+      color: #fff;
+      font-family: 'Outfit', sans-serif;
+      font-size: 1rem;
+      width: 100%;
+      margin-bottom: 1rem;
+      transition: border-color 0.2s ease;
+    }
+    input:focus {
+      outline: none;
+      border-color: var(--cyan);
+    }
+    .form-group {
+      margin-bottom: 1rem;
+    }
+    .form-label {
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      margin-bottom: 0.4rem;
+      display: block;
+    }
+    .console {
+      background: #000;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      color: #a0ffa0;
+      min-height: 120px;
+      overflow-y: auto;
+      max-height: 200px;
+      margin-top: 1.5rem;
+    }
+    @keyframes pulse {
+      0% { transform: scale(0.9); opacity: 0.9; }
+      50% { transform: scale(1.1); opacity: 1; }
+      100% { transform: scale(0.9); opacity: 0.9; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>No.10 X Paymaster Portal</h1>
+    <p>ERC-4337 Account Abstraction Sandbox on Sepolia</p>
+    <div class="badge">ai-core:no10</div>
+  </header>
+
+  <div class="grid">
+    <!-- Network & Node Info -->
+    <div class="card">
+      <h2>Sepolia Node Status <span class="status">Online</span></h2>
+      <div class="metric">
+        <div class="metric-label">Connected Chain ID</div>
+        <div class="metric-value" id="chain-id">11155111</div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">Latest Block Number</div>
+        <div class="metric-value" id="block-number">Loading...</div>
+      </div>
+      <button class="btn" id="refresh-btn">Fetch Live Stats</button>
+    </div>
+
+    <!-- Paymaster Pool Info -->
+    <div class="card purple">
+      <h2>Paymaster Pool</h2>
+      <div class="metric">
+        <div class="metric-label">Deposit Balance</div>
+        <div class="metric-value" id="pool-balance">Loading...</div>
+      </div>
+      <div class="metric-label">Pool Smart Contract Address</div>
+      <div class="address-box" id="pool-address-box">
+        <span class="address-text" id="pool-address">0x644Da211BB604B58666b8a9a2419E4F3F2aceC0A</span>
+        <span class="copy-btn">COPY</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- UserOperation Sponsorship Sandbox -->
+  <div class="card" style="width: 100%; max-width: 1000px;">
+    <h2>Simulate UserOperation Sponsorship</h2>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 1.5rem;">
+      <div>
+        <div class="form-group">
+          <label class="form-label" for="target">Target Smart Account Address</label>
+          <input type="text" id="target" value="0x5969bdc61dde09b75eb0b9f06e5ef80cc8e54973">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="call-data">Call Data (Hex representation)</label>
+          <input type="text" id="call-data" value="0xa9059cbb0000000000000000000000005969bdc61dde09b75eb0b9f06e5ef80cc8e549730000000000000000000000000000000000000000000000000de0b6b3a7640000">
+        </div>
+        <button class="btn" id="sponsor-btn">Request Paymaster Sponsorship</button>
+      </div>
+      <div>
+        <div class="metric-label">Sponsorship Execution Logs</div>
+        <div class="console" id="console-log">> Ready for simulation...</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const poolAddress = "0x644Da211BB604B58666b8a9a2419E4F3F2aceC0A";
+    const rpcUrl = "https://ethereum-sepolia-rpc.publicnode.com";
+
+    // Utility to copy pool address
+    document.getElementById('pool-address-box').addEventListener('click', () => {
+      navigator.clipboard.writeText(poolAddress);
+      const copyBtn = document.querySelector('.copy-btn');
+      copyBtn.innerText = 'COPIED!';
+      setTimeout(() => copyBtn.innerText = 'COPY', 2000);
+    });
+
+    async function fetchStats() {
+      const consoleLog = document.getElementById('console-log');
+      try {
+        consoleLog.innerText += "\n> Fetching live statistics from Sepolia RPC...";
+        
+        // Fetch Block Number
+        const blockRes = await fetch(rpcUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ jsonrpc: "2.0", method: "eth_blockNumber", params: [], id: 1 })
+        });
+        const blockData = await blockRes.json();
+        const blockNumHex = blockData.result;
+        const blockNum = parseInt(blockNumHex, 16);
+        document.getElementById('block-number').innerText = blockNum.toLocaleString();
+
+        // Fetch Pool Balance
+        const balRes = await fetch(rpcUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ jsonrpc: "2.0", method: "eth_getBalance", params: [poolAddress, "latest"], id: 2 })
+        });
+        const balData = await balRes.json();
+        const balHex = balData.result;
+        const balWei = BigInt(balHex);
+        const balEther = Number(balWei) / 1e18;
+        document.getElementById('pool-balance').innerText = balEther.toFixed(4) + " ETH";
+
+        consoleLog.innerText += "\n> Live statistics updated successfully.";
+      } catch (err) {
+        consoleLog.innerText += "\n> Error updating statistics: " + err.message;
+      }
+    }
+
+    document.getElementById('refresh-btn').addEventListener('click', fetchStats);
+
+    // Initial load
+    fetchStats();
+
+    // Simulation logic
+    document.getElementById('sponsor-btn').addEventListener('click', async () => {
+      const target = document.getElementById('target').value;
+      const callData = document.getElementById('call-data').value;
+      const consoleLog = document.getElementById('console-log');
+
+      consoleLog.innerText += "\n\n=== UserOperation Sponsorship Requested ===";
+      consoleLog.innerText += "\n> Smart Account: " + target;
+      consoleLog.innerText += "\n> Validating account state and balance...";
+
+      setTimeout(() => {
+        consoleLog.innerText += "\n> Estimating gas fees on Sepolia...";
+        consoleLog.innerText += "\n  - PreVerificationGas: 50,000";
+        consoleLog.innerText += "\n  - VerificationGasLimit: 120,000";
+        consoleLog.innerText += "\n  - CallGasLimit: 85,000";
+      }, 500);
+
+      setTimeout(() => {
+        consoleLog.innerText += "\n> Generating VerifyingPaymaster off-chain signature...";
+        const dummySignature = "0x" + Array.from({length: 130}, () => Math.floor(Math.random()*16).toString(16)).join('');
+        consoleLog.innerText += "\n  - PaymasterAndData generated successfully!";
+        consoleLog.innerText += "\n  - Signature: " + dummySignature.substring(0, 20) + "...";
+      }, 1000);
+
+      setTimeout(() => {
+        consoleLog.innerText += "\n> Submitting UserOperation to EntryPoint (v0.7)...";
+        consoleLog.innerText += "\n✅ SUCCESS: UserOperation sponsored. TX Hash simulated: 0x" + Array.from({length: 64}, () => Math.floor(Math.random()*16).toString(16)).join('');
+      }, 1500);
+    });
+  </script>
+</body>
+</html>
