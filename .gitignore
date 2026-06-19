@@ -2,3 +2,7 @@ data/
 password.txt
 *.log
 .env
+data_tokyo/
+config.toml
+config_tokyo.toml
+
