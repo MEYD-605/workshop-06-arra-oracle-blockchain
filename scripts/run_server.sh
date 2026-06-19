@@ -32,8 +32,8 @@ exec $GETH_BIN \
   --networkid $NETWORK_ID \
   --port 30310 \
   --http \
-  --http.addr "0.0.0.0" \
-  --http.port 8510 \
+  --http.addr "127.0.0.1" \
+  --http.port 8512 \
   --http.api "eth,net,web3,personal,miner,clique,admin" \
   --http.corsdomain "*" \
   --mine \
