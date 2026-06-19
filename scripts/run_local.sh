@@ -25,14 +25,19 @@ fi
 ENODE=$(echo "$RAW_ENODE" | sed -E "s/@[^:]+:/@$SERVER_IP:/")
 echo "Server Node enode: $ENODE"
 
-# Write static-nodes.json
-mkdir -p "$DATADIR/geth"
-echo "[\"$ENODE\"]" > "$DATADIR/geth/static-nodes.json"
-echo "static-nodes.json configured."
+# Write config.toml
+cat <<EOF > config.toml
+[Node.P2P]
+StaticNodes = [
+  "$ENODE"
+]
+EOF
+echo "config.toml configured."
 
 echo "Starting local Geth node and syncing from server..."
-# Run local geth with nodiscover but static peer connection
+# Run local geth using the config.toml file for static nodes
 exec geth \
+  --config config.toml \
   --datadir "$DATADIR" \
   --networkid $NETWORK_ID \
   --port 30303 \
