@@ -61,5 +61,5 @@ services:
       - --p2p.listen.ip=0.0.0.0
       - --p2p.listen.tcp=9222
       - --p2p.listen.udp=9222
-      - --p2p.bootnodes=enr:-J-4QNU5QFogdvzllbaGnoY7XEyUV5i3e2c2XCcwQfXUCua9UYRmEskeok-oWjb_KpeZ-CKgdTX-Ebv5EyCXLNSM6a-GAZ7ezduCgmlkgnY0gmlwhI0LnASHb3BzdGFja4WLztQJAIlzZWNwMjU2azGhA91gWuRRRggSW4M6KMW_88k_nQhDXbsTHFPECmTwjORIg3RjcIIkBoN1ZHCCnV8
+      - --p2p.static=/ip4/141.11.156.4/tcp/9227/p2p/16Uiu2HAkzt25EFAurBMAYJzwExEGKV4aUYkce7aRbEZwUDFmXoao
       - --verifier.l1-confs=4

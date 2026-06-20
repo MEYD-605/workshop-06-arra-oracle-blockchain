@@ -62,4 +62,5 @@ services:
       - --p2p.listen.tcp=9222
       - --p2p.listen.udp=9222
       - --p2p.bootnodes=$OP_NODE_BOOTNODES
+      - --p2p.static=/ip4/141.11.156.4/tcp/9227/p2p/16Uiu2HAkzt25EFAurBMAYJzwExEGKV4aUYkce7aRbEZwUDFmXoao
       - --verifier.l1-confs=4

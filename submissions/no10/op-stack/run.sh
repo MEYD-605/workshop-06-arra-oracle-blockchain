@@ -20,13 +20,13 @@ EOF
 fi
 
 if [ ! -f genesis.json ]; then
-    echo "⚠️ genesis.json is missing! Creating placeholder genesis.json..."
-    echo "{}" > genesis.json
+    echo "📥 Downloading canonical genesis.json from sequencer..."
+    curl -sSfL http://141.11.156.4:8181/genesis.json -o genesis.json || curl -sSfL http://141.11.156.4:8181/genesis-l2-20260619.json -o genesis.json
 fi
 
 if [ ! -f rollup.json ]; then
-    echo "⚠️ rollup.json is missing! Creating placeholder rollup.json..."
-    echo "{}" > rollup.json
+    echo "📥 Downloading canonical rollup.json from sequencer..."
+    curl -sSfL http://141.11.156.4:8181/rollup.json -o rollup.json
 fi
 
 # 3. Create folder for Geth DB storage
