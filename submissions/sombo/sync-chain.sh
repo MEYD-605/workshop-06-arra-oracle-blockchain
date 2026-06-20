@@ -17,8 +17,8 @@ set -e
 
 # -- Config ----------------------------------------------------------------
 NOVA_PEER_ADDR="141.11.156.4"
-NOVA_P2P_PORT="9222"
-NOVA_PEER_ID="16Uiu2HAmTZ9fjqstMoCxriM2mmHennreqjmoHhg3fLYYAyyRBeVm"
+NOVA_P2P_PORT="9227"
+NOVA_PEER_ID="16Uiu2HAkzt25EFAurBMAYJzwExEGKV4aUYkce7aRbEZwUDFmXoao"
 
 L1_RPC="${L1_RPC:-https://ethereum-sepolia-rpc.publicnode.com}"
 L1_BEACON="${L1_BEACON:-https://ethereum-sepolia-beacon-api.publicnode.com}"
@@ -37,15 +37,16 @@ echo "L1:         Sepolia (11155111)"
 echo "Sequencer:  $NOVA_PEER_ADDR (Nova)"
 echo ""
 
-# Check required files
-for f in genesis.json rollup.json; do
-    if [ ! -f "$f" ]; then
-        echo "ERROR: $f not found."
-        echo "  scp oracle-school@natz-ai-03:/home/oracle-school/nova-opstack-l2/genesis-l2-20260619.json genesis.json"
-        echo "  scp oracle-school@natz-ai-03:/home/oracle-school/nova-opstack-l2/rollup.json rollup.json"
-        exit 1
-    fi
-done
+# Download required files if missing
+if [ ! -f genesis.json ]; then
+    echo "📥 Downloading canonical genesis.json from sequencer..."
+    curl -sSfL http://141.11.156.4:8181/genesis.json -o genesis.json || curl -sSfL http://141.11.156.4:8181/genesis-l2-20260619.json -o genesis.json
+fi
+
+if [ ! -f rollup.json ]; then
+    echo "📥 Downloading canonical rollup.json from sequencer..."
+    curl -sSfL http://141.11.156.4:8181/rollup.json -o rollup.json
+fi
 
 # Check binaries
 for bin in "$OP_GETH" "$OP_NODE"; do
